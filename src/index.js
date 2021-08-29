@@ -14,11 +14,10 @@ const loadMoreBtn = new LoadMoreBtn({
 });
 const newsApiService = new NewsApiService();
 
-// loadMoreBtn.enable();
 refs.searchForm.addEventListener('submit', onSearch);
-loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
+loadMoreBtn.refs.button.addEventListener('click', fetchArticles);
 
-let searchQuery = '';
+// let searchQuery = '';
 function onSearch(e) {
   e.preventDefault();
 
@@ -27,16 +26,19 @@ function onSearch(e) {
     return alert('Неправильный ввод');
   }
   loadMoreBtn.show();
-  loadMoreBtn.disable();
   newsApiService.resetPage();
+  clearArticlesContainer();
+  fetchArticles();
+}
+
+function fetchArticles() {
+  loadMoreBtn.disable();
   newsApiService.fetchArticles().then(hits => {
-    clearArticlesContainer();
     appendArticlesMarkUp(hits);
+    loadMoreBtn.enable();
   });
 }
-function onLoadMore() {
-  newsApiService.fetchArticles().then(appendArticlesMarkUp);
-}
+
 function appendArticlesMarkUp(hits) {
   refs.articlesContainer.insertAdjacentHTML('beforeend', imageCardTpl(hits));
 }
