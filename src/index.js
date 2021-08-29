@@ -1,5 +1,5 @@
 import './css/common.css';
-import './sass/main.scss';
+
 import NewsApiService from './apiService';
 import imageCardTpl from './templates/image-card.hbs';
 import LoadMoreBtn from './load-more-btn';
