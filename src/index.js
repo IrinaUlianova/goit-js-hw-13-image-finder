@@ -3,6 +3,8 @@ import './sass/main.scss';
 import NewsApiService from './apiService';
 import imageCardTpl from './templates/image-card.hbs';
 import LoadMoreBtn from './load-more-btn';
+import scrollIntoView from './scroll';
+
 const refs = {
   searchForm: document.querySelector('.js-search-form'),
   articlesContainer: document.querySelector('.js-gallery-container'),
@@ -40,7 +42,18 @@ function fetchArticles() {
 }
 
 function appendArticlesMarkUp(hits) {
+  if (hits.length < 12) {
+    loadMoreBtn.hide();
+    error({
+      text: 'We could not find more images for you.',
+      type: 'error',
+      autoOpen: 'false',
+      delay: 3000,
+    });
+  }
   refs.articlesContainer.insertAdjacentHTML('beforeend', imageCardTpl(hits));
+  const nextImagesList = refs.articlesContainer.lastElementChild;
+  scrollIntoView(nextImagesList);
 }
 function clearArticlesContainer() {
   refs.articlesContainer.innerHTML = '';
